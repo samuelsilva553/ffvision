@@ -1,0 +1,36 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.ffvision'
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.ffvision"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        ndk { abiFilters 'arm64-v8a' }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    signingConfigs {
+        debug {
+            storeFile file("${rootDir}/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+    buildTypes.debug { signingConfig signingConfigs.debug }
+    // Necessário para carregar o modelo ONNX
+    aaptOptions { noCompress "onnx" }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'dev.rikka.shizuku:api:13.1.5'
+    implementation 'dev.rikka.shizuku:provider:13.1.5'
+    // ONNX Runtime para rodar o modelo YOLO na CPU do celular
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.17.1'
+}
